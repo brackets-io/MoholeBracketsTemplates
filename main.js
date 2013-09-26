@@ -97,6 +97,12 @@ define(function (require, exports, module) {
             case "hcssjquery":
                 template = require("text!html/hjquery.html");
                 break;
+            case "php":
+                template = require("text!html/base.php");
+                break;
+            case "phphtml":
+                template = require("text!html/html.php");
+                break;
             default:
                 template = "Something went wrong somewhere. Not horribly wrong, just wrong.";
             }
