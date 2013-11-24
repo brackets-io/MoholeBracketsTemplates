@@ -36,19 +36,16 @@ define(function (require, exports, module) {
    
     function action() {
         
-        /*  
-        *   This uses a modal window to present the different template choices.
-        *   I'd rather use a "Templates" menu under File but this will do
-        *   until sub-menus are implemented. I may still keep it under Edit
-        *   since I'm technically editing the current file instead of
-        *   creating a new one, which I would prefer but I don't see how to
-        *   do that yet. Right now File -> New creates a new file in the file
-        *   system instead of blank file waiting to be saved, which would
-        *   be better for this extension.
-        */
-        
         // add our modal window to the body
         $("body").append(modal);
+        
+        // show new elements
+        $('#templates_modalBackdrop').css('opacity', 0.5);
+        $('#templates_modal').css({
+            'position': 'absolute',
+            'top': 'calc(50% - ' + ($('#templates_modal').height() / 2) + 'px)',
+            'left': 'calc(50% - ' + ($('#templates_modal').width() / 2) + 'px)'
+        });
         
         // pressing esc key closes modal and backdrop
         $(document).keyup(function (e) {
@@ -77,34 +74,36 @@ define(function (require, exports, module) {
         
         // result of clicking a template choice
         // selector is very specific to avoid cross-extension contamination, just in case
-        $("#templates_modal .dialog-message a").on("click", function (e) {
-            e.preventDefault();
-            // grab the chosen doctype
-            var doctype = $(this).attr("data-template");
-            
+        $('#templates_modal select#standard, #templates_modal select#frameworks').on('change', function () {
+            // send the chosen template
+            chosenTemplate($(this).val());            
+        });
+        
+        var chosenTemplate = function (choice) {
             // grab the html to be inserted into file
             var template;
-            switch (doctype) {
-            case "html":
-                template = require("text!html/html5.html");
-                break;
-            case "hcss":
-                template = require("text!html/hcss.html");
-                break;
-            case "hcssjs":
-                template = require("text!html/hcssjs.html");
-                break;
-            case "hcssjquery":
-                template = require("text!html/hjquery.html");
-                break;
-            case "php":
-                template = require("text!html/base.php");
-                break;
-            case "phphtml":
-                template = require("text!html/html.php");
-                break;
-            default:
-                template = "Something went wrong somewhere. Not horribly wrong, just wrong.";
+            switch (choice) {
+                // standard
+                case "html":
+                    template = require("text!html/html5.html");
+                    break;
+                case "hcss":
+                    template = require("text!html/hcss.html");
+                    break;
+                case "hcssjs":
+                    template = require("text!html/hcssjs.html");
+                    break;
+                case "hcssjquery":
+                    template = require("text!html/hjquery.html");
+                    break;
+                case "php":
+                    template = require("text!html/base.php");
+                    break;
+                case "phphtml":
+                    template = require("text!html/html.php");
+                    break;
+                default:
+                    template = "Something went wrong somewhere. Not horribly wrong, just wrong.";
             }
             
             // insert html into file, this will overwrite whatever content happens to be there already
@@ -112,7 +111,7 @@ define(function (require, exports, module) {
             
             // automatically close the modal window
             $("#templates_modalBtn").click();
-        });
+        };
 
     }
     
