@@ -1,0 +1,11 @@
+{
+    "name": "mohole.templates-brackets",
+    "title": "Template HTML Mohole",
+    "description": "Crea i template di file utilizzati nei corsi Mohole.",
+    "homepage": "https://github.com/mohole/MoholeBracketsTemplates",
+    "version": "1.0.2",
+    "author": "Salvatore Laisa",
+    "engines": {
+        "brackets": ">=0.32.0"
+    }
+}

@@ -94,7 +94,7 @@ define(function (require, exports, module) {
                     template = require("text!html/html.php");
                     break;
                 default:
-                    template = "Something went wrong somewhere. Not horribly wrong, just wrong.";
+                    template = "Qualcosa è andato storto. Non è la fine... però boh io mi metterei un sacchetto in testa per ogni evenienza.";
             }
             
             EditorManager.getCurrentFullEditor()._codeMirror.setValue(template);
