@@ -18,6 +18,9 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
+*
+* Customization by Salvatore Laisa
+*
 */
 
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50, browser: true */
@@ -31,15 +34,12 @@ define(function (require, exports, module) {
         EditorManager  = brackets.getModule("editor/EditorManager"),
         Menus          = brackets.getModule("command/Menus");
     
-    // load up modal content, don't forget text! at beginning of file name
     var modal = require("text!html/modal.html");
    
     function action() {
         
-        // add our modal window to the body
         $("body").append(modal);
         
-        // show new elements
         $('#templates_modalBackdrop').css('opacity', 0.5);
         $('#templates_modal').css({
             'position': 'absolute',
@@ -47,14 +47,12 @@ define(function (require, exports, module) {
             'left': 'calc(50% - ' + ($('#templates_modal').width() / 2) + 'px)'
         });
         
-        // pressing esc key closes modal and backdrop
         $(document).keyup(function (e) {
             if (e.keyCode === 27) {
                 $("#templates_modal, #templates_modalBackdrop").remove();
             }
         });
         
-        // clicking close button, x header button, or backdrop removes modal from body
         $("#templates_modalBtn, #templates_modalBackdrop, #templates_modal a.close").on("click", function (e) {
             e.preventDefault();
             $("#templates_modal, #templates_modalBackdrop").remove();
@@ -63,27 +61,20 @@ define(function (require, exports, module) {
         var editor = EditorManager.getCurrentFullEditor();
         if (editor) {
             if (editor._codeMirror.getValue().length > 0) {
-                // file has content, show warning
                 $("#templates_warning").show();
             }
         } else {
-            // no file is open, show error
             $("#templates_error").show();
             $(".modal-body").hide();
         }
         
-        // result of clicking a template choice
-        // selector is very specific to avoid cross-extension contamination, just in case
-        $('#templates_modal select#standard, #templates_modal select#frameworks').on('change', function () {
-            // send the chosen template
+       $('#templates_modal select#standard, #templates_modal select#frameworks').on('change', function () {
             chosenTemplate($(this).val());            
         });
         
         var chosenTemplate = function (choice) {
-            // grab the html to be inserted into file
             var template;
             switch (choice) {
-                // standard
                 case "html":
                     template = require("text!html/html5.html");
                     break;
@@ -106,16 +97,13 @@ define(function (require, exports, module) {
                     template = "Something went wrong somewhere. Not horribly wrong, just wrong.";
             }
             
-            // insert html into file, this will overwrite whatever content happens to be there already
             EditorManager.getCurrentFullEditor()._codeMirror.setValue(template);
             
-            // automatically close the modal window
             $("#templates_modalBtn").click();
         };
 
     }
     
-    // Register the commands and insert in the File menu
     CommandManager.register("Template HTML Mohole", "templates", action);
     var menu = Menus.getMenu(Menus.AppMenuBar.EDIT_MENU);
     menu.addMenuDivider();
